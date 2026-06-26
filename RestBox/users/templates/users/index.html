@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RestBox authentication</title>
+</head>
+<body>
+    <h1>Welcome to RestBox</h1>
+
+    <form method="POST" action="{% url 'users:role_handling' %}">
+        {% csrf_token %}
+        
+        <label>select your role please:</label>
+        <select name="role">
+            <option value="host">Host</option>
+            <option value="guest">Guest</option>
+        </select>
+
+        <button type="submit" name="action" value="login">Login</button>
+        <button type="submit" name="action" value="register">Register</button>
+    </form>
+</body>
+</html>
