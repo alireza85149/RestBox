@@ -17,12 +17,27 @@ def role_handling(request):
 # the below functions are just sturctures and they should be compeleted later
 def registeration(request, role):
     if role == 'host':
-        return HttpResponse('this is registeration page for hosts')
+        # return HttpResponse('this is registeration page for hosts')
+        fullname = request.POST.get('fullname')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        return render(request, 'users/registeration.html')
     elif role == 'guest':
-        return HttpResponse('this is registeration page for guest')
+        # return HttpResponse('this is registeration page for guest')
+        fullname = request.POST.get('fullname')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        return render(request, 'users/registeration.html')
     
 def login(request, role):
     if role == 'host':
-        return HttpResponse('this is login page for hosts')
+        # return HttpResponse('this is login page for hosts')
+        fullname = request.POST.get('fullname')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        return render(request, 'users/login.html')
     elif role == 'guest':
-        return HttpResponse('this is login page for guest')
+        # return HttpResponse('this is login page for guest')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        return render(request, 'users/registeration.html')
