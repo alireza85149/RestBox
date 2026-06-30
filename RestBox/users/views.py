@@ -64,33 +64,35 @@ def registeration(request, role):
     return render(request, 'users/registeration.html')
     
 def login(request, role):
-    error = None
-    if role == 'host':
+    if request.method == 'GET':
+        return render(request, 'users/login.html', {'role': role})
+    
+    elif request.method == 'POST':
+        error = None
         email = request.POST.get('email')
         password = request.POST.get('password')
+        
+        if not email or not password:
+            error = "Please enter both email and password"
+            return render(request, 'users/login.html', {
+                'error': error,
+                'role': role
+            })
+        
         try:
-            user = UserProfile.objects.get(email=email, role=role)
-            if check_password(password, user.password):
+            user_profile = UserProfile.objects.get(email=email, role=role)
+            
+            if check_password(password, user_profile.password):
                 return redirect('users:index')
             else:
-                error = "error: The password is wrong"
+                error = "The password is incorrect"
+                
         except UserProfile.DoesNotExist:
-            error = "No user with these specifications was found."
-            
-        return render(request, 'users/login.html', {'error': error, 'role' : role})
-            
-    elif role == 'guest':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        try:
-            user = UserProfile.objects.get(email=email, role=role)
-            if check_password(password, user.password):
-                return redirect('user:index')
-            else:
-                error = "error: The password is wrong"
-        except:
-            error = "error: No user with these specifications was found."
+            error = "No user found with these credentials"
         
-        return render(request, 'users/login.html', {'error': error, 'role': role})
+        return render(request, 'users/login.html', {
+            'error': error,
+            'role': role
+        })
     
-    return render(request, 'users/login.html')
+    return render(request, 'users/login.html', {'role': role})
