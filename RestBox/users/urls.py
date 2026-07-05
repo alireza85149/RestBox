@@ -6,5 +6,5 @@ urlpatterns = [
     path('role_handling/', views.role_handling, name='role_handling'),
     path('registeration/<str:role>/', views.registeration, name = 'registeration'),
     path('user_login/<str:role>/', views.login, name='user_login'),
-
+    path('host-dashboard/', views.host_dashboard, name='host_dashboard')
 ]

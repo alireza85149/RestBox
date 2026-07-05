@@ -10,13 +10,13 @@ def index(request):
 
 def role_handling(request):
     role = request.POST.get('role')
-    action= request.POST.get('action')
+    action = request.POST.get('action')
 
     if action == 'register':
-        return redirect(reverse('users:registeration' , kwargs={'role':role}))
+        return redirect(reverse('users:registeration', kwargs={'role': role}))
     elif action == 'login':
-        return redirect(reverse('users:user_login' , kwargs={'role':role}))
-# the below functions are just sturctures and they should be compeleted later
+        return redirect(reverse('users:user_login', kwargs={'role': role}))
+
 def registeration(request, role):
     error = None
     if request.method == 'POST':
@@ -26,7 +26,7 @@ def registeration(request, role):
             password = request.POST.get('password')
             if len(password) < 8:
                 error = "error: The password must be at least eight characters."
-                return render('users/registeration.html', {'error': error, 'role': role})
+                return render(request, 'users/registeration.html', {'error': error, 'role': role})
             try:
                 hashed_password = make_password(password)
                 user = UserProfile.objects.create(
@@ -35,11 +35,11 @@ def registeration(request, role):
                     password=hashed_password,
                     role=role
                 )
-                return redirect(reverse('users:user_login', kwargs={'role':role}))
+                return redirect(reverse('users:user_login', kwargs={'role': role}))
 
             except:
                 error = 'this accountwith this email is already exists.'
-                return render(request , 'users/registeration.html', {'error': error, 'role': role})
+                return render(request, 'users/registeration.html', {'error': error, 'role': role})
 
         elif role == 'guest':
             fullname = request.POST.get('fullname')
@@ -56,10 +56,10 @@ def registeration(request, role):
                     password=hashed_password,
                     role=role
                 )
-                return redirect(reverse('users:user_login', kwargs={'role':role}))
+                return redirect(reverse('users:user_login', kwargs={'role': role}))
             except:
                 error = 'this accountwith this email is already exists.'
-                return render(request , 'users/registeration.html', {'error': error , 'role': role})
+                return render(request, 'users/registeration.html', {'error': error, 'role': role})
         
     return render(request, 'users/registeration.html')
     
@@ -83,7 +83,10 @@ def login(request, role):
             user_profile = UserProfile.objects.get(email=email, role=role)
             
             if check_password(password, user_profile.password):
-                return redirect('users:index')
+                if role == 'host':
+                    return redirect('users:host_dashboard')
+                else:
+                    return redirect('users:index')  
             else:
                 error = "The password is incorrect"
                 
@@ -96,3 +99,6 @@ def login(request, role):
         })
     
     return render(request, 'users/login.html', {'role': role})
+
+def host_dashboard(request):
+    return render(request, 'users/host_dashboard.html')

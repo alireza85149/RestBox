@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد مدیریت ویلاها</title>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>🏠 Host Dashboard</h1>
+            <div class="subtitle">Welcome to your management panel! From here you can manage your villas.</div>
+        </div>
+        
+        <div class="dashboard-content">
+            <div class="user-info">
+                <span>👋 Welcome, Host!</span>
+                <span class="badge">Role: Host</span>
+            </div>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="icon">➕</div>
+                    <h3>Register New Villa</h3>
+                    <p>Add your villa or accommodation to the system.</p>
+                    <a href="{% url 'villas:create_villa' %}" class="btn btn-primary">Register Villa</a>
+                </div>
+                
+                <div class="card">
+                    <div class="icon">📋</div>
+                    <h3>My Villas</h3>
+                    <p>View and manage all your registered villas.</p>
+                    <a href="{% url 'villas:my_villas' %}" class="btn btn-info">View List</a>
+                </div>
+                
+                <div class="card">
+                    <div class="icon">📅</div>
+                    <h3>Bookings</h3>
+                    <p>View and manage booking requests for your villas.</p>
+                    <a href="#" class="btn btn-warning">View Bookings</a>
+                </div>
+                
+                <div class="card">
+                    <div class="icon">📊</div>
+                    <h3>Statistics</h3>
+                    <p>View statistics and reports of your villas.</p>
+                    <a href="#" class="btn btn-info">View Stats</a>
+                </div>
+            </div>
+            
+            <div class="action-bar">
+                <a href="{% url 'users:index' %}" class="btn btn-secondary">🏠 Back to Home</a>
+                <a href="#" class="btn btn-danger">🚪 Logout</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
