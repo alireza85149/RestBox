@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.hashers import make_password, check_password
 from .models import UserProfile
+from django.db import IntegrityError
 # Create your views here.
 
 def index(request):
@@ -37,9 +38,9 @@ def registeration(request, role):
                 )
                 return redirect(reverse('users:user_login', kwargs={'role': role}))
 
-            except:
+            except IntegrityError:
                 error = 'this accountwith this email is already exists.'
-                return render(request, 'users/registeration.html', {'error': error, 'role': role})
+                return render(request, 'users/registeration.html', {'error': error, 'role': role, 'email': email})
 
         elif role == 'guest':
             fullname = request.POST.get('fullname')
@@ -47,7 +48,7 @@ def registeration(request, role):
             password = request.POST.get('password')
             if len(password) < 8:
                 error = "error: The password must be at least eight characters."
-                return render(request, 'users/registeration.html', {'error': error, 'role': role})
+                return render(request, 'users/registeration.html', {'error': error, 'role': role, 'email': email})
             try:
                 hashed_password = make_password(password)
                 user = UserProfile.objects.create(
@@ -57,7 +58,7 @@ def registeration(request, role):
                     role=role
                 )
                 return redirect(reverse('users:user_login', kwargs={'role': role}))
-            except:
+            except IntegrityError:
                 error = 'this accountwith this email is already exists.'
                 return render(request, 'users/registeration.html', {'error': error, 'role': role})
         
