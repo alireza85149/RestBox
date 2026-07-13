@@ -1,69 +1,47 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.contrib.auth.hashers import make_password, check_password
 from .models import Villa
-from .forms import VillaForm
+from django.db import IntegrityError
+from users.models import UserProfile
 
-@login_required
+def host_dashboard(request):
+    return render(request, 'villas\host_dashboard.html')
+
 def create_villa(request):
-    if request.user.role != 'host':
-        messages.error(request, 'You do not have permission to access this page.')
-        return redirect('users:index')
-    
-    if request.method == 'POST':
-        form = VillaForm(request.POST)
-        if form.is_valid():
-            villa = form.save(commit=False)
-            villa.host = request.user
-            villa.save()
-            messages.success(request, 'Villa created successfully!')
-            return redirect('villas:villa_detail', villa_id=villa.id)
-        else:
-            messages.error(request, 'Error creating villa. Please check the information.')
+    error = None
+    if request.method == 'GET':
+        return render(request, "villas\create_villa.html")
     else:
-        form = VillaForm()
-    
-    return render(request, 'villas/create_villa.html', {'form': form})
+        host_id = request.session.get('user_id')
+        city = request.POST.get('city')
+        title = request.POST.get('title')
+        address = request.POST.get('address')
+        capacity = request.POST.get('capacity')
+        price_per_night = request.POST.get('price_per_night')
+        amenities = request.POST.get('amenities')
+        try:
+            host = UserProfile.objects.get(id=host_id)
+            villa = Villa.objects.create(
+                host = host,
+                city = city,
+                title = title,
+                address = address,
+                capacity = capacity,
+                price_per_night = price_per_night,
+                amenities = amenities
+            )
+            return redirect('villas:host_dashboard')
+        except IntegrityError:
+            error = 'This villa has already been added.'
+            return render(request, 'villas\create_villa.html', {'error': error})
 
-@login_required
-def my_villas(request):
-    villas = Villa.objects.filter(host=request.user)
-    return render(request, 'villas/my_villas.html', {'villas': villas})
 
-def villa_detail(request, villa_id):
-    villa = get_object_or_404(Villa, id=villa_id)
-    return render(request, 'villas/villa_detail.html', {'villa': villa})
-
-@login_required
-def edit_villa(request, villa_id):
-    villa = get_object_or_404(Villa, id=villa_id)
+def show_my_villas(request):
+    host_id = request.session.get('user_id')
+    villas = Villa.objects.filter(host_id=host_id)
     
-    if request.user != villa.host:
-        messages.error(request, 'You do not have permission to edit this villa.')
-        return redirect('villas:my_villas')
-    
-    if request.method == 'POST':
-        form = VillaForm(request.POST, instance=villa)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Villa updated successfully!')
-            return redirect('villas:villa_detail', villa_id=villa.id)
-    else:
-        form = VillaForm(instance=villa)
-    
-    return render(request, 'villas/edit_villa.html', {'form': form, 'villa': villa})
-
-@login_required
-def delete_villa(request, villa_id):
-    villa = get_object_or_404(Villa, id=villa_id)
-    
-    if request.user != villa.host:
-        messages.error(request, 'You do not have permission to delete this villa.')
-        return redirect('villas:my_villas')
-    
-    if request.method == 'POST':
-        villa.delete()
-        messages.success(request, 'Villa deleted successfully!')
-        return redirect('villas:my_villas')
-    
-    return render(request, 'villas/delete_villa.html', {'villa': villa})
+    return render(request, 'villas/my_villas.html', {
+        'villas': villas,
+        'total': villas.count()
+    })

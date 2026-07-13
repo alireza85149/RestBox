@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Host Dashboard</title>
+</head>
+<body>
+        <h1>Host Dashboard</h1>
+        
+                <h2>Add New Villa</h2>
+                <p>Register a new villa with details like city, address, capacity, price and amenities</p>
+                <a href="{% url 'villa:create_villa' %}">Add Villa</a>
+            
+                <h2>My Villas</h2>
+                <p>View and manage all your registered villas</p>
+                <a href="{% url 'villa:show_my_villas' %}">View Villas</a>
+</body>
+</html>

@@ -85,7 +85,7 @@ def login(request, role):
             
             if check_password(password, user_profile.password):
                 if role == 'host':
-                    return redirect('users:host_dashboard')
+                    return redirect('villas:host_dashboard')
                 else:
                     return redirect('users:index')  
             else:
@@ -100,6 +100,3 @@ def login(request, role):
         })
     
     return render(request, 'users/login.html', {'role': role})
-
-def host_dashboard(request):
-    return render(request, 'users/host_dashboard.html')
