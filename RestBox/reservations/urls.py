@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+app_name = 'reservations'
 urlpatterns = [
-    path('guest_dashboard/<int:guest_id>', views.guest_dashboard, name='guest_dashboard')
+    path('guest_dashboard/', views.guest_dashboard, name='guest_dashboard')
 ]

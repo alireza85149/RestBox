@@ -57,7 +57,7 @@ def registeration(request, role):
                     password=hashed_password,
                     role=role
                 )
-                return redirect(reverse('users:user_login', kwargs={'role': role}))
+                return redirect(reverse('reservations:guest_dashboard', kwargs={'role': role}))
             except IntegrityError:
                 error = 'this accountwith this email is already exists.'
                 return render(request, 'users/registeration.html', {'error': error, 'role': role})
@@ -87,8 +87,8 @@ def login(request, role):
                 request.session['user_id'] = user_profile.user_id
                 if role == 'host':
                     return redirect('Villas:host_dashboard')
-                else:
-                    return redirect('users:index')  
+                elif role == 'guest':
+                    return redirect('reservations:guest_dashboard')  
             else:
                 error = "The password is incorrect"
                 
