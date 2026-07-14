@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Villa - {{ villa.title }}</title>
+</head>
+<body>
+    <h1>Edit Villa</h1>
+    
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <label>Title:</label><br>
+        <input type="text" name="title" value="{{ villa.title }}" required><br><br>
+        
+        <label>City:</label><br>
+        <input type="text" name="city" value="{{ villa.city }}" required><br><br>
+        
+        <label>Address:</label><br>
+        <textarea name="address" required>{{ villa.address }}</textarea><br><br>
+        
+        <label>Capacity (guests):</label><br>
+        <input type="number" name="capacity" value="{{ villa.capacity }}" required><br><br>
+        
+        <label>Price per Night (Tomans):</label><br>
+        <input type="number" name="price_per_night" value="{{ villa.price_per_night }}" required><br><br>
+        
+        <label>Amenities:</label><br>
+        <textarea name="amenities">{{ villa.amenities }}</textarea><br><br>
+        
+        <button type="submit">Save Changes</button>
+        <a href="{% url 'villas:show_my_villas' %}">Cancel</a>
+    </form>
+</body>
+</html>

@@ -14,36 +14,43 @@
         {% csrf_token %}
         
         <div>
-            <label for="city">City:</label>
+            <label for="city">City:</label><br>
             <input type="text" id="city" name="city" required placeholder="Enter city name" value="{{ city|default:'' }}">
         </div>
         
         <br>
         
         <div>
-            <label for="title">Villa Title:</label>
+            <label for="title">Villa Title:</label><br>
             <input type="text" id="title" name="title" required placeholder="Enter villa title" value="{{ title|default:'' }}">
         </div>
         
         <br>
         
         <div>
-            <label for="address">Address:</label>
+            <label for="address">Address:</label><br>
             <textarea id="address" name="address" required placeholder="Enter full address">{{ address|default:'' }}</textarea>
         </div>
         
         <br>
         
         <div>
-            <label for="capacity">Capacity (guests):</label>
+            <label for="capacity">Capacity (guests):</label><br>
             <input type="number" id="capacity" name="capacity" required min="1" placeholder="Number of guests" value="{{ capacity|default:'' }}">
         </div>
         
         <br>
         
         <div>
-            <label for="price_per_night">Price per Night:</label>
+            <label for="price_per_night">Price per Night (Tomans):</label><br>
             <input type="number" id="price_per_night" name="price_per_night" required min="0" step="0.01" placeholder="Price in Tomans" value="{{ price_per_night|default:'' }}">
+        </div>
+        
+        <br>
+                <div>
+            <label for="amenities">Amenities:</label><br>
+            <textarea id="amenities" name="amenities" rows="4" placeholder="Example: WiFi, Pool, Parking, Air Conditioning, Kitchen...">{{ amenities|default:'' }}</textarea>
+            <p><small>Separate amenities with commas (e.g., Pool, Parking)</small></p>
         </div>
         
         <br>

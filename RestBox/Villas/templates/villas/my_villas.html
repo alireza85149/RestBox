@@ -10,7 +10,6 @@
         <p>Total villas: {{ total }}</p>
         
         {% for villa in villas %}
-            <div>
                 <h2>{{ villa.title }}</h2>
                 <p><strong>City:</strong> {{ villa.city }}</p>
                 <p><strong>Address:</strong> {{ villa.address }}</p>
@@ -20,11 +19,21 @@
                 {% if villa.amenities %}
                     <p><strong>Amenities:</strong> {{ villa.amenities }}</p>
                 {% endif %}
+                
+                <!-- دکمه‌های ادیت و حذف -->
+                <a href="{% url 'villas:edit_villa' villa.id %}">
+                    <button>Edit</button>
+                </a>
+                <a href="{% url 'villas:delete_villa' villa.id %}">
+                    <button>Delete</button>
+                </a>
+                
                 <hr>
             </div>
         {% endfor %}
+        
     {% else %}
-        <p>You haven't registered any villas yet.</p>
+        <p>No villas registered yet.</p>
     {% endif %}
     
     <br>

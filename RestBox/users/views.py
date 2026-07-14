@@ -84,6 +84,7 @@ def login(request, role):
             user_profile = UserProfile.objects.get(email=email, role=role)
             
             if check_password(password, user_profile.password):
+                request.session['user_id'] = user_profile.user_id
                 if role == 'host':
                     return redirect('Villas:host_dashboard')
                 else:

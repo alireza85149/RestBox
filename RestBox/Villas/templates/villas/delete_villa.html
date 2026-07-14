@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Villa</title>
+</head>
+<body>
+    <h1>Delete Villa</h1>
+    
+    <p>Are you sure you want to delete this villa?</p>
+    
+        <h2>{{ villa.title }}</h2>
+        <p><strong>City:</strong> {{ villa.city }}</p>
+        <p><strong>Address:</strong> {{ villa.address }}</p>
+        <p><strong>Capacity:</strong> {{ villa.capacity }} guests</p>
+        <p><strong>Price per Night:</strong> {{ villa.price_per_night }} Tomans</p>
+    </div>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <button>Yes, Delete</button>
+        <a href="{% url 'villas:show_my_villas' %}">Cancel</a>
+    </form>
+</body>
+</html>
