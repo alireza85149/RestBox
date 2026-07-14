@@ -20,11 +20,10 @@
                     <p><strong>Amenities:</strong> {{ villa.amenities }}</p>
                 {% endif %}
                 
-                <!-- دکمه‌های ادیت و حذف -->
-                <a href="{% url 'villas:edit_villa' villa.id %}">
+                <a href="{% url 'Villas:edit_villa' Villa.id %}">
                     <button>Edit</button>
                 </a>
-                <a href="{% url 'villas:delete_villa' villa.id %}">
+                <a href="{% url 'Villas:delete_villa' Villa.id %}">
                     <button>Delete</button>
                 </a>
                 
