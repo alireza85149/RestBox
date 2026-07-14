@@ -12,4 +12,4 @@ class Villa(models.Model):
     Capacity = models.IntegerField(verbose_name="capacity")
     Price_per_night = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="price_per_night")    
     def __str__(self):
-        return self.title    
+        return self.Title    
