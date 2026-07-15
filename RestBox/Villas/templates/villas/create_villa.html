@@ -47,10 +47,26 @@
         </div>
         
         <br>
-                <div>
-            <label for="amenities">Amenities:</label><br>
-            <textarea id="amenities" name="amenities" rows="4" placeholder="Example: WiFi, Pool, Parking, Air Conditioning, Kitchen...">{{ amenities|default:'' }}</textarea>
-            <p><small>Separate amenities with commas (e.g., Pool, Parking)</small></p>
+        <div>
+            <label><strong>Amenities:</strong></label><br>
+            <br>
+            <label>
+                <input type="checkbox" name="amenities_wifi" value="true">
+                WiFi
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="amenities_parking" value="true">
+                Parking
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="amenities_pool" value="true">
+                Pool
+            </label>
+            <br>
+            <br>
+            <p><small>Check all amenities that this villa offers</small></p>
         </div>
         
         <br>
