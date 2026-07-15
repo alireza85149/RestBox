@@ -1,13 +1,57 @@
 <!DOCTYPE html>
 <body>
     <div>
+        <h2>serach for villas</h2>
+        <form method="GET">
+            <input
+                type="text"
+                name="city"
+                placeholder="Enter city"
+                value="{{ request.GET.city }}"
+            >
 
+            <label>Check-in</label>
+            <input
+                type="date"
+                name="check_in"
+                value="{{ request.GET.check_in }}"
+            >
+
+            <label>Check-out</label>
+            <input
+                type="date"
+                name="check_out"
+                value="{{ request.GET.check_out }}"
+            >
+
+            <button type="submit">Search</button>
+        </form>
+        <h2>Available Villas</h2>
+        {% if searched_villas %}
+            {% for villa in searched_villas %}
+                <div class="villa-card">
+                    <h3>{{ villa.title }}</h3>
+                    <p><strong>City:</strong> {{ villa.city }}</p>
+                    <p><strong>Capacity:</strong> {{ villa.capacity }}</p>
+
+                    <p><strong>Price:</strong>
+                        ${{ villa.price_per_night }}/night
+                    </p>
+
+                    <a href="{% url 'reservations:villa_detail' villa.id %}">
+                        View Details
+                    </a>
+
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No villas found.</p>
+        {% endif %}
         <h2>My Reservations</h2>
-
         <hr>
-
-        <h5>Total Reservations: {{ total }}</h5>
-
+        {%if total%}
+            <h5>Total Reservations: {{ total }}</h5>
+        {%endif%}
         {% if reservs %}
 
         <table >
