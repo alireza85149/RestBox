@@ -57,7 +57,7 @@ def registeration(request, role):
                     password=hashed_password,
                     role=role
                 )
-                return redirect(reverse('reservations:guest_dashboard', kwargs={'role': role}))
+                return redirect(reverse('users:user_login', kwargs={'role': role}))
             except IntegrityError:
                 error = 'this accountwith this email is already exists.'
                 return render(request, 'users/registeration.html', {'error': error, 'role': role})
