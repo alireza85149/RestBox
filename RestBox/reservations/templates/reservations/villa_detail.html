@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<body>
+    <h1>{{ villa.title }}</h1>
+    <p><strong>City:</strong> {{ villa.city }}</p>
+    <p><strong>Address:</strong> {{ villa.address }}</p>
+    <p><strong>Capacity:</strong> {{ villa.capacity }}</p>
+    <p><strong>Price:</strong>
+        ${{ villa.price_per_night }} / night
+    </p>
+    <p><strong>Amenities:</strong> {{villa.amenities}}</p>
+    <hr>
+    <h2>Reserve this Villa</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label>Check-in</label>
+        <input type="date" name="check_in">
+        <label>Check-out</label>
+        <input type="date" name="check_out">
+        <button type="submit">
+            Reserve
+        </button>
+    </form>
+</body>

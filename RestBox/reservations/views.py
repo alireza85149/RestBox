@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Reservation
 from Villas.models import Villa
 
@@ -22,3 +22,7 @@ def guest_dashboard(request):
             'count' : reservs.count(),
             'searched_villas': Villa.objects.all()
         })
+
+def villa_detail(request, villa_id):
+    villa = get_object_or_404(Villa, villa_id=villa_id)
+    return render(request, 'reservations/villa_detail.html', {'villa': villa})
