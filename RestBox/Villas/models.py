@@ -12,6 +12,6 @@ class Villa(models.Model):
     address = models.TextField(verbose_name="address", unique=True)
     capacity = models.IntegerField(verbose_name="capacity")
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="price_per_night")   
-    amenities = models.TextField(blank=True, null=True)  
+    amenities = models.JSONField(default=dict)  
     def __str__(self):
         return self.title  

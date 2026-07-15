@@ -16,14 +16,11 @@
                 <p><strong>Capacity:</strong> {{ villa.capacity }} guests</p>
                 <p><strong>Price per Night:</strong> {{ villa.price_per_night }} Tomans</p>
                 
-                {% if villa.amenities %}
-                    <p><strong>Amenities:</strong> {{ villa.amenities }}</p>
-                {% endif %}
-                
-                <a href="{% url 'Villas:edit_villa' Villa.id %}">
+                <p><strong>Amenities:</strong> {{ villa.amenities }}</p>
+                <a href="{% url 'Villas:edit_villa' villa.villa_id %}">
                     <button>Edit</button>
                 </a>
-                <a href="{% url 'Villas:delete_villa' Villa.id %}">
+                <a href="{% url 'Villas:delete_villa' villa.villa_id %}">
                     <button>Delete</button>
                 </a>
                 

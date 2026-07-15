@@ -26,8 +26,11 @@ def create_villa(request):
         address = request.POST.get('address')
         capacity = request.POST.get('capacity')
         price_per_night = request.POST.get('price_per_night')
-        amenities = request.POST.get('amenities')
-        
+        amenities = {
+            'wifi': request.POST.get('amenities_wifi') == 'true',
+            'parking': request.POST.get('amenities_parking') == 'true',
+            'pool': request.POST.get('amenities_pool') == 'true',
+        }
         try:
             host = UserProfile.objects.get(user_id=session_user_id)
             villa = Villa.objects.create(
