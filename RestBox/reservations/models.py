@@ -18,3 +18,5 @@ class Reservation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"Reservation #{self.reservation_id} - {self.guest.name} - {self.villa.Title}"
+    
+# added migrate for reservation database
