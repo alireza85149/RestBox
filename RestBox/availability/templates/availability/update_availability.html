@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Availability</title>
+</head>
+<body>
+<h1>Update Availability</h1>
+<h2>{{ villa.title }}</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label>Year:</label>
+    <input type="number" name="year" required>
+    <br><br>
+    <label>Month:</label>
+    <select name="month" required>
+        <option value="1">Farvardin</option>
+        <option value="2">Ordibehesht</option>
+        <option value="3">Khordad</option>
+        <option value="4">Tir</option>
+        <option value="5">Mordad</option>
+        <option value="6">Shahrivar</option>
+        <option value="7">Mehr</option>
+        <option value="8">Aban</option>
+        <option value="9">Azar</option>
+        <option value="10">Dey</option>
+        <option value="11">Bahman</option>
+        <option value="12">Esfand</option>
+    </select>
+    <hr>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Day</th>
+            <th>Status</th>
+        </tr>
+        {% for day in days %}
+        <tr>
+            <td>{{ day }}</td>
+            <td>
+                <select name="{{ day }}">
+                    <option value="A">Available</option>
+                    <option value="R">Reserved</option>
+                    <option value="N">Not Added</option>
+                </select>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <button type="submit">
+        Save Changes
+    </button>
+</form>
+</body>
+</html>

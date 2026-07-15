@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ villa.title }} - Availability</title>
+</head>
+<body>
+    <h1>{{ villa.title }}</h1>
+    <hr>
+    <h2>Availability</h2>
+    {% if dates %}
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+            {% for day in dates %}
+            <tr>
+                <td>{{ day.date }}</td>
+                <td>
+                    {% if day.status == 'A' %}
+                        Available
+                    {% elif day.status == 'R' %}
+                        Reserved
+                    {% else %}
+                        Not Added
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No availability has been added yet.</p>
+    {% endif %}
+    <br>
+    <a href="{% url 'availability:update_availability' villa.villa_id %}">
+        Update Availability
+    </a>
+</body>
+</html>
