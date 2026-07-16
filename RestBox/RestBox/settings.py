@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Villas',
     'reservations',
     'availability',
+    'payments',
 ]
 
 MIDDLEWARE = [
