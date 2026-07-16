@@ -1,23 +1,60 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <title>{{ villa.title }} - Details</title>
+</head>
 <body>
     <h1>{{ villa.title }}</h1>
     <p><strong>City:</strong> {{ villa.city }}</p>
     <p><strong>Address:</strong> {{ villa.address }}</p>
-    <p><strong>Capacity:</strong> {{ villa.capacity }}</p>
-    <p><strong>Price:</strong>
-        ${{ villa.price_per_night }} / night
-    </p>
-    <p><strong>Amenities:</strong> {{villa.amenities}}</p>
+    <p><strong>Capacity:</strong> {{ villa.capacity }} guests</p>
+    <p><strong>Price:</strong> ${{ villa.price_per_night }} / night</p>
+    <p><strong>Amenities:</strong> {{ villa.amenities }}</p>
+    
     <hr>
+    
     <h2>Reserve this Villa</h2>
     <form method="POST">
         {% csrf_token %}
-        <label>Check-in</label>
-        <input type="date" name="check_in">
-        <label>Check-out</label>
-        <input type="date" name="check_out">
-        <button type="submit">
-            Reserve
-        </button>
+        <label>Check-in:</label>
+        <input type="date" name="check_in" required>
+        
+        <label>Check-out:</label>
+        <input type="date" name="check_out" required>
+        
+        <button type="submit">Reserve</button>
     </form>
+    
+    <hr>
+    
+    <h2>Availability Calendar</h2>
+    
+    {% if availabilities %}
+        <table border="1">
+            <tr>
+                <th>Date (Jalali)</th>
+                <th>Status</th>
+            </tr>
+            {% for avail in availabilities %}
+                <tr>
+                    <td>{{ avail.jalali_date }}</td>
+                    <td>
+                        {% if avail.status == 'A' %}
+                            Available
+                        {% elif avail.status == 'R' %}
+                            Reserved
+                        {% elif avail.status == 'N' %}
+                            Not Available
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No availability data for this villa yet.</p>
+    {% endif %}
+    
+    <br>
+    <a href="{% url 'reservations:guest_dashboard' %}">Back to Search</a>
 </body>
+</html>

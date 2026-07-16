@@ -38,26 +38,49 @@ def guest_dashboard(request):
 def villa_detail(request, villa_id):
     villa = get_object_or_404(Villa, villa_id=villa_id)
     user_id = request.session.get('user_id')
+    
+    import jdatetime
+    availabilities = villa.availabilities.all().order_by("date")
+    for avail in availabilities:
+        if avail.date:
+            jdate = jdatetime.date.fromgregorian(date=avail.date)
+            avail.jalali_date = jdate.strftime('%Y/%m/%d')
+    
     if request.method == "POST":
         check_in = request.POST.get('check_in')
         check_out = request.POST.get('check_out')
         check_in = datetime.strptime(check_in, "%Y-%m-%d").date()
         check_out = datetime.strptime(check_out, "%Y-%m-%d").date()
+        
         if check_out <= check_in:
             messages.error(request, "Invalid date range.")
             return redirect("reservations:villa_detail", villa_id=villa_id)
+        
         with transaction.atomic():
-            availabilities = Availability.objects.select_for_update().filter(
-            villa=villa,
-            date__gte=check_in,
-            date__lt=check_out)
-            if availabilities.filter(status="A").count() != (check_out - check_in).days:
+            availabilities_check = Availability.objects.select_for_update().filter(
+                villa=villa,
+                date__gte=check_in,
+                date__lt=check_out
+            )
+            
+            if availabilities_check.filter(status="A").count() != (check_out - check_in).days:
                 messages.error(request, "Villa is no longer available.")
                 return redirect('reservations:guest_dashboard')
+            
             nights = (check_out - check_in).days
             total_price = nights * villa.price_per_night
-            reservation = Reservation.objects.create(villa= villa,guest_id = user_id, check_in = check_in, check_out = check_out, total_price = total_price)
-            availabilities.update(status='R')
-            payment = Payment.objects.create(reservation=reservation,amount=total_price)
+            reservation = Reservation.objects.create(
+                villa=villa,
+                guest_id=user_id,
+                check_in=check_in,
+                check_out=check_out,
+                total_price=total_price
+            )
+            availabilities_check.update(status='R')
+            payment = Payment.objects.create(reservation=reservation, amount=total_price)
             return redirect('payments:payments', payment.payment_id)
-    return render(request, 'reservations/villa_detail.html', {'villa': villa})
+    
+    return render(request, 'reservations/villa_detail.html', {
+        'villa': villa,
+        'availabilities': availabilities,
+    })
