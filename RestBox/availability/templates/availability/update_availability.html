@@ -1,54 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Update Availability</title>
+    <title>Update Availability - {{ villa.title }}</title>
 </head>
 <body>
-<h1>Update Availability</h1>
-<h2>{{ villa.title }}</h2>
-<form method="POST">
-    {% csrf_token %}
-    <label>Year:</label>
-    <input type="number" name="year" required>
-    <br><br>
-    <label>Month:</label>
-    <select name="month" required>
-        <option value="1">Farvardin</option>
-        <option value="2">Ordibehesht</option>
-        <option value="3">Khordad</option>
-        <option value="4">Tir</option>
-        <option value="5">Mordad</option>
-        <option value="6">Shahrivar</option>
-        <option value="7">Mehr</option>
-        <option value="8">Aban</option>
-        <option value="9">Azar</option>
-        <option value="10">Dey</option>
-        <option value="11">Bahman</option>
-        <option value="12">Esfand</option>
-    </select>
+    <h1>Manage Availability</h1>
+    <h2>{{ villa.title }} - {{ villa.city }}</h2>
+    
     <hr>
-    <table border="1" cellpadding="5">
-        <tr>
-            <th>Day</th>
-            <th>Status</th>
-        </tr>
-        {% for day in days %}
-        <tr>
-            <td>{{ day }}</td>
-            <td>
-                <select name="{{ day }}">
-                    <option value="A">Available</option>
-                    <option value="R">Reserved</option>
-                    <option value="N">Not Added</option>
-                </select>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    
+    <form method="GET">
+        <label>Year (Jalali):</label>
+        <input type="number" name="year" value="{{ year }}" min="1400" max="1500" required>
+        
+        <label>Month:</label>
+        <select name="month" required>
+            <option value="1" {% if month == 1 %}selected{% endif %}>farvardin</option>
+            <option value="2" {% if month == 2 %}selected{% endif %}>ordibehesht</option>
+            <option value="3" {% if month == 3 %}selected{% endif %}>khordad</option>
+            <option value="4" {% if month == 4 %}selected{% endif %}>tir</option>
+            <option value="5" {% if month == 5 %}selected{% endif %}>mordad</option>
+            <option value="6" {% if month == 6 %}selected{% endif %}>shahrivar</option>
+            <option value="7" {% if month == 7 %}selected{% endif %}>mehr</option>
+            <option value="8" {% if month == 8 %}selected{% endif %}>aban</option>
+            <option value="9" {% if month == 9 %}selected{% endif %}>azar</option>
+            <option value="10" {% if month == 10 %}selected{% endif %}>dey</option>
+            <option value="11" {% if month == 11 %}selected{% endif %}>bahman</option>
+            <option value="12" {% if month == 12 %}selected{% endif %}>esfand</option>
+        </select>
+        
+        <button type="submit">Show Days</button>
+    </form>
+    
+    <hr>
+    
+    {% if days_list %}
+        <h3>{{ month_name }} {{ year }}</h3>
+        
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="year" value="{{ year }}">
+            <input type="hidden" name="month" value="{{ month }}">
+            
+            <table border="1" cellpadding="5">
+                <tr>
+                    <th>Day</th>
+                    <th>Date (Jalali)</th>
+                    <th>Status</th>
+                </tr>
+                {% for day_info in days_list %}
+                    <tr>
+                        <td>{{ day_info.day }}</td>
+                        <td>{{ year }}/{{ month }}/{{ day_info.day }}</td>
+                        <td>
+                            <select name="day_{{ day_info.day }}">
+                                <option value="A" {% if day_info.status == 'A' %}selected{% endif %}>
+                                    Available
+                                </option>
+                                <option value="N" {% if day_info.status == 'N' %}selected{% endif %}>
+                                    Not Available
+                                </option>
+                                <option value="R" {% if day_info.status == 'R' %}selected{% endif %}>
+                                    Reserved
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            
+            <br>
+            <button type="submit">Save Changes</button>
+        </form>
+    {% else %}
+        <p>Please select a year and month to see the days.</p>
+    {% endif %}
+    
     <br>
-    <button type="submit">
-        Save Changes
-    </button>
-</form>
+    <a href="{% url 'Villas:show_my_villas' %}">Back to My Villas</a>
+    <br>
+    <a href="{% url 'Villas:host_dashboard' %}">Back to Dashboard</a>
 </body>
 </html>

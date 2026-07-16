@@ -5,24 +5,39 @@
 </head>
 <body>
     <h1>{{ villa.title }}</h1>
+    <p><strong>City:</strong> {{ villa.city }}</p>
+    
     <hr>
-    <h2>Availability</h2>
+    
+    <h2>Availability Calendar</h2>
+    
     {% if dates %}
         <table border="1" cellpadding="8">
             <tr>
-                <th>Date</th>
+                <th>Date (Jalali)</th>
+                <th>Day of Week</th>
                 <th>Status</th>
             </tr>
             {% for day in dates %}
             <tr>
-                <td>{{ day.date }}</td>
+                <td>{{ day.jalali_date }}</td>
+                <td>
+                    {% if day.date.weekday == 0 %}Monday
+                    {% elif day.date.weekday == 1 %}Tuesday
+                    {% elif day.date.weekday == 2 %}Wednesday
+                    {% elif day.date.weekday == 3 %}Thursday
+                    {% elif day.date.weekday == 4 %}Friday
+                    {% elif day.date.weekday == 5 %}Saturday
+                    {% elif day.date.weekday == 6 %}Sunday
+                    {% endif %}
+                </td>
                 <td>
                     {% if day.status == 'A' %}
                         Available
                     {% elif day.status == 'R' %}
                         Reserved
                     {% else %}
-                        Not Added
+                        Not Available
                     {% endif %}
                 </td>
             </tr>
@@ -31,9 +46,12 @@
     {% else %}
         <p>No availability has been added yet.</p>
     {% endif %}
+    
     <br>
     <a href="{% url 'availability:update_availability' villa.villa_id %}">
-        Update Availability
+        <button>Update Availability</button>
     </a>
+    <br>
+    <a href="{% url 'Villas:show_my_villas' %}">Back to My Villas</a>
 </body>
 </html>
