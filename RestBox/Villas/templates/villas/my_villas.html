@@ -23,6 +23,12 @@
                 <a href="{% url 'Villas:delete_villa' villa.villa_id %}">
                     <button>Delete</button>
                 </a>
+                <a href="{% url 'availability:update_availability' villa.villa_id %}">
+                    <button>Manage Availability</button>
+                </a>
+                <a href="{% url 'availability:availability' villa.villa_id %}">
+                    <button>View Calendar</button>
+                </a>
                 
                 <hr>
             </div>

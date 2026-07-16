@@ -3,6 +3,7 @@ from django.urls import reverse
 from .models import Villa
 from django.db import IntegrityError
 from users.models import UserProfile
+import jdatetime
 
 def host_dashboard(request):
     user_id = request.session.get('user_id')
@@ -42,7 +43,7 @@ def create_villa(request):
                 price_per_night=price_per_night,
                 amenities=amenities
             )
-            return redirect('Villas:host_dashboard')
+            return redirect(reverse('availability:update_availability', kwargs={"villa_id":villa.villa_id}))
         except UserProfile.DoesNotExist:
             error = 'User not found. Please login again.'
             return render(request, 'Villas/create_villa.html', {'error': error})
