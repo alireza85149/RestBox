@@ -1,0 +1,101 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="card shadow mx-auto" style="max-width:600px;">
+
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Payment</h3>
+        </div>
+
+        <div class="card-body">
+
+            <table class="table">
+
+                <tr>
+                    <th>Payment ID</th>
+                    <td>{{ payment.payment_id }}</td>
+                </tr>
+
+                <tr>
+                    <th>Reservation ID</th>
+                    <td>{{ payment.reservation.reservation_id }}</td>
+                </tr>
+
+                <tr>
+                    <th>Villa</th>
+                    <td>{{ payment.reservation.villa.title }}</td>
+                </tr>
+
+                <tr>
+                    <th>City</th>
+                    <td>{{ payment.reservation.villa.city }}</td>
+                </tr>
+
+                <tr>
+                    <th>Guest</th>
+                    <td>{{ payment.reservation.guest.full_name }}</td>
+                </tr>
+
+                <tr>
+                    <th>Check In</th>
+                    <td>{{ payment.reservation.check_in }}</td>
+                </tr>
+
+                <tr>
+                    <th>Check Out</th>
+                    <td>{{ payment.reservation.check_out }}</td>
+                </tr>
+
+                <tr>
+                    <th>Amount</th>
+                    <td>{{ payment.amount }} تومان</td>
+                </tr>
+
+                <tr>
+                    <th>Status</th>
+                    <td>{{ payment.get_status_display }}</td>
+                </tr>
+
+            </table>
+
+            <div class="d-flex justify-content-between mt-4">
+
+                <form method="post"
+                      action="{% url 'payments:payment_success' payment.payment_id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-success">
+                        Pay Successfully
+                    </button>
+                </form>
+
+                <form method="post"
+                      action="{% url 'payments:payment_failed' payment.payment_id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger">
+                        Cancel Payment
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+```
