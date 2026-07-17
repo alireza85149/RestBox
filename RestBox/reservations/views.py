@@ -97,7 +97,7 @@ def villa_detail(request, villa_id):
             )
             availabilities_check.update(status='R')
             payment = Payment.objects.create(reservation=reservation, amount=total_price)
-            return redirect('payments:payments', payment.payment_id)
+            return redirect('payments:payments', payment_id = payment.payment_id)
     
     return render(request, 'reservations/villa_detail.html', {
         'villa': villa,

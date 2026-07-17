@@ -2,5 +2,8 @@
 <body>
     <h2>payment for reserving {{villa.title}}, faild</h2>
     <h3>payment id : {{payment_id}}</h3>
-    <a href="{% url 'resrvation:guest_dashboard'% }">return to dashboard</a>
+
+    <a href="{% url 'reservations:guest_dashboard' %}">
+        Return to Dashboard
+    </a>
 </body>
