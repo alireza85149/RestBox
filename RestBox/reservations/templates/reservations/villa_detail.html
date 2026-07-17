@@ -16,11 +16,45 @@
     <h2>Reserve this Villa</h2>
     <form method="POST">
         {% csrf_token %}
-        <label>Check-in:</label>
-        <input type="date" name="check_in" required>
-        
-        <label>Check-out:</label>
-        <input type="date" name="check_out" required>
+        <label>Check-in</label>
+
+        <select name="check_in_year" required>
+            {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="check_in_month" required>
+            {% for month in months %}
+                <option value="{{ month }}">{{ month }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="check_in_day" required>
+            {% for day in days %}
+                <option value="{{ day }}">{{ day }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Check-out</label>
+
+        <select name="check_out_year" required>
+            {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="check_out_month" required>
+            {% for month in months %}
+                <option value="{{ month }}">{{ month }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="check_out_day" required>
+            {% for day in days %}
+                <option value="{{ day }}">{{ day }}</option>
+            {% endfor %}
+        </select>
         
         <button type="submit">Reserve</button>
     </form>

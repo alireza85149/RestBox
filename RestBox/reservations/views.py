@@ -7,16 +7,25 @@ from availability.models import Availability
 from datetime import datetime
 from django.db import transaction
 from django.contrib import messages
+import jdatetime
+
 # Create your views here.
 def guest_dashboard(request):
     guest_id = request.session.get('user_id')
     reservs = Reservation.objects.filter(guest_id = guest_id)
     s_city = request.GET.get('city')
     if s_city:
-        s_check_in = request.GET.get('check_in')
-        s_check_out = request.GET.get('check_out')
-        s_check_in = datetime.strptime(s_check_in, "%Y-%m-%d").date()
-        s_check_out = datetime.strptime(s_check_out, "%Y-%m-%d").date()
+        jmonths={"فروردین":1, "اردیبهشت":2, "خرداد":3, "تیر":4, "مرداد":5, "شهریور":6, "مهر":7, "آبان":8, "آذر":9, "دی":10, "بهمن":11, "اسفند":12}
+        ijy = int(request.GET["check_in_year"])
+        ijm = (request.GET["check_in_month"])
+        ijm = jmonths[ijm]
+        ijd = int(request.GET["check_in_day"])
+        s_check_in = jdatetime.date(ijy, ijm, ijd).togregorian()
+        ojy = int(request.GET["check_out_year"])
+        ojm = (request.GET["check_out_month"])
+        ojm = jmonths[ojm]
+        ojd = int(request.GET["check_out_day"])
+        s_check_out = jdatetime.date(ojy, ojm, ojd).togregorian()
         villas = Villa.objects.filter(city__icontains = s_city)
         searched_villas = []
         for v in villas:
@@ -26,20 +35,25 @@ def guest_dashboard(request):
         return render(request, 'reservations/guest_dashboard.html', {
             'reservs': reservs, 
             'count': reservs.count(),
-            'searched_villas' : searched_villas
+            'searched_villas' : searched_villas,
+            'years': range(1405, 1506),
+            'months':["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"],
+            'days' : range(1, 32)
         })
     else:
         return render(request, 'reservations/guest_dashboard.html', {
             'reservs': reservs,
             'count' : reservs.count(),
-            'searched_villas': Villa.objects.all()
+            'searched_villas': Villa.objects.all(),
+            'years': range(1405, 1506),
+            'months':["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"],
+            'days' : range(1, 32)
         })
 
 def villa_detail(request, villa_id):
     villa = get_object_or_404(Villa, villa_id=villa_id)
     user_id = request.session.get('user_id')
     
-    import jdatetime
     availabilities = villa.availabilities.all().order_by("date")
     for avail in availabilities:
         if avail.date:
@@ -47,11 +61,17 @@ def villa_detail(request, villa_id):
             avail.jalali_date = jdate.strftime('%Y/%m/%d')
     
     if request.method == "POST":
-        check_in = request.POST.get('check_in')
-        check_out = request.POST.get('check_out')
-        check_in = datetime.strptime(check_in, "%Y-%m-%d").date()
-        check_out = datetime.strptime(check_out, "%Y-%m-%d").date()
-        
+        jmonths={"فروردین":1, "اردیبهشت":2, "خرداد":3, "تیر":4, "مرداد":5, "شهریور":6, "مهر":7, "آبان":8, "آذر":9, "دی":10, "بهمن":11, "اسفند":12}
+        ijy = int(request.GET["check_in_year"])
+        ijm = (request.GET["check_in_month"])
+        ijm = jmonths[ijm]
+        ijd = int(request.GET["check_in_day"])
+        check_in = jdatetime.date(ijy, ijm, ijd).togregorian()
+        ojy = int(request.GET["check_out_year"])
+        ojm = (request.GET["check_out_month"])
+        ojm = jmonths[ojm]
+        ojd = int(request.GET["check_out_day"])
+        check_out = jdatetime.date(ojy, ojm, ojd).togregorian()
         if check_out <= check_in:
             messages.error(request, "Invalid date range.")
             return redirect("reservations:villa_detail", villa_id=villa_id)
@@ -66,7 +86,6 @@ def villa_detail(request, villa_id):
             if availabilities_check.filter(status="A").count() != (check_out - check_in).days:
                 messages.error(request, "Villa is no longer available.")
                 return redirect('reservations:guest_dashboard')
-            
             nights = (check_out - check_in).days
             total_price = nights * villa.price_per_night
             reservation = Reservation.objects.create(
