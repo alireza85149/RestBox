@@ -62,15 +62,15 @@ def villa_detail(request, villa_id):
     
     if request.method == "POST":
         jmonths={"فروردین":1, "اردیبهشت":2, "خرداد":3, "تیر":4, "مرداد":5, "شهریور":6, "مهر":7, "آبان":8, "آذر":9, "دی":10, "بهمن":11, "اسفند":12}
-        ijy = int(request.GET["check_in_year"])
-        ijm = (request.GET["check_in_month"])
+        ijy = int(request.POST["check_in_year"])
+        ijm = (request.POST["check_in_month"])
         ijm = jmonths[ijm]
-        ijd = int(request.GET["check_in_day"])
+        ijd = int(request.POST["check_in_day"])
         check_in = jdatetime.date(ijy, ijm, ijd).togregorian()
-        ojy = int(request.GET["check_out_year"])
-        ojm = (request.GET["check_out_month"])
+        ojy = int(request.POST["check_out_year"])
+        ojm = (request.POST["check_out_month"])
         ojm = jmonths[ojm]
-        ojd = int(request.GET["check_out_day"])
+        ojd = int(request.POST["check_out_day"])
         check_out = jdatetime.date(ojy, ojm, ojd).togregorian()
         if check_out <= check_in:
             messages.error(request, "Invalid date range.")
@@ -102,4 +102,7 @@ def villa_detail(request, villa_id):
     return render(request, 'reservations/villa_detail.html', {
         'villa': villa,
         'availabilities': availabilities,
+        'years': range(1405, 1506),
+        'months':["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"],
+        'days' : range(1, 32)
     })
